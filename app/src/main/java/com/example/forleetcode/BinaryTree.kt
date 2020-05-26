@@ -1,27 +1,34 @@
 package com.example.forleetcode
 
-import kotlin.math.abs
 import kotlin.math.max
 
 /**
  * Nick, 2020/5/26
- *  // TODO: 2020/5/26 send to leetcode
+ *
  */
-class BalanceBinaryTree {
+class BinaryTree {
 
     class TreeNode(var value: Int) {
             var left: TreeNode? = null
             var right: TreeNode? = null
     }
+// [104] Maximum Depth of Binary Tree
+    fun maxDepth(root: TreeNode?): Int {
+        if (root == null) return 0
+        val r = maxDepth(root.right) + 1
+        val l = maxDepth(root.left) + 1
+        return Math.max(r, l)
+    }
 
-    var result: Boolean = true
-
+//    [110] Balanced Binary Tree
+    private var isBalance: Boolean = true
     fun isBalanced(root: TreeNode?): Boolean {
+        isBalance = true
         if (root == null) {
             return true
         }
         getDepth(root)
-        return result
+        return isBalance
     }
 
     private fun getDepth(root: TreeNode): Int {
@@ -31,15 +38,18 @@ class BalanceBinaryTree {
             0
         }
         val l = if (root.left != null) {
-            return getDepth(root.left!!) + 1
+            getDepth(root.left!!) + 1
         } else {
             0
         }
 
-        if (abs(r - l) > 1) {
-            result = false
+        println("value of r, l: (${root.left?.value}, ${root.right?.value})")
+        println("(r, l): (${r}, $l)")
+
+        if (r - l > 1 || r - l < -1) {
+            isBalance = false
             return 0
         }
-        return max(r, l)
+        return Math.max(r, l)
     }
 }
