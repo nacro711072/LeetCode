@@ -40,5 +40,4 @@ class SubSets2 {
             subset.removeAt(subset.lastIndex)
         }
     }
-
 }
