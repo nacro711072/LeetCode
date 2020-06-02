@@ -48,7 +48,6 @@ import com.example.forleetcode.tree.model.TreeNode
 /**
  * Nick, 2020/6/1
  * [100] Same Tree
- * // TODO: 2020/6/1 send to leetcode
  */
 class SameTree {
     fun isSameTree(p: TreeNode?, q: TreeNode?): Boolean {
