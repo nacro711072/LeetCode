@@ -25,7 +25,6 @@ package com.example.forleetcode
 /**
  * Nick, 2020/6/1
  * [120] Triangle
- * // TODO: 2020/6/1 send to leetcode
  */
 class MinPathOfTriangle {
     fun minimumTotal(triangle: List<List<Int>>): Int {
