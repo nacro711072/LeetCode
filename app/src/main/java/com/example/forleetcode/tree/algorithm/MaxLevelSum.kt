@@ -38,20 +38,29 @@ import java.util.*
 /**
  * Nick, 2020/6/2
  * [1161] Maximum Level Sum of a Binary Tree
- * // TODO: 2020/6/2 send to leetcode
  */
 class MaxLevelSum {
-    val sumList: MutableList<Int> = mutableListOf()
-
 //    DFS
     fun maxLevelSum(root: TreeNode?): Int {
         var level = 0
+        val sumList: MutableList<Int> = mutableListOf()
 
-        sumNode(root, level + 1)
-        return sumList.max() ?: 0
+        sumNode(root, level, sumList)
+        var res = 0 to 0
+        sumList.forEachIndexed { index, total ->
+            if (total > res.second) {
+                res = (index + 1) to total
+            }
+        }
+
+        return res.first
     }
 
-    private fun sumNode(root: TreeNode?, level: Int) {
+    private fun sumNode(
+        root: TreeNode?,
+        level: Int,
+        sumList: MutableList<Int>
+    ) {
         if (root == null) return
 
         sumList.getOrNull(level)?.let {
@@ -60,15 +69,14 @@ class MaxLevelSum {
             sumList.add(level, root.`val`)
         }
 
-        sumNode(root.left, level + 1)
-        sumNode(root.right, level + 1)
+        sumNode(root.left, level + 1, sumList)
+        sumNode(root.right, level + 1, sumList)
     }
 
 //    BFS
-    var maxResult: Int = 0
     fun maxLevelSum2(root: TreeNode?): Int {
         var max = Pair(0, 0)
-        var level = 0
+        var level = 1
         if (root == null) return 0
 
         val queue: Queue<TreeNode> = LinkedList()
