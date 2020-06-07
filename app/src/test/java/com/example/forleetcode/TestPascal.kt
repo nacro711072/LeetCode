@@ -16,4 +16,16 @@ class TestPascal {
         println(pascal.getRow(4))
         println(pascal.getRow(5))
     }
+
+    @Test
+    fun testGetRow2() {
+
+        val pascal = Pascal()
+        println(pascal.getRow2(1))
+        println(pascal.getRow2(2))
+        println(pascal.getRow2(3))
+        println(pascal.getRow2(4))
+        println(pascal.getRow2(5))
+    }
+
 }

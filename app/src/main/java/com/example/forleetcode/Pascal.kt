@@ -44,16 +44,16 @@ class Pascal {
     // TODO: 2020/6/5 單純程式解 
     fun getRow2(rowIndex: Int): List<Int> {
         val res: MutableList<Int> = ArrayList(rowIndex + 1)
-        var temp: Long = 1
-        res.add(temp.toInt())
-        for (i in 1..rowIndex) {
-            if (i < rowIndex / 2 + 1) {
-                temp = temp * (rowIndex - (i - 1)) / i
-                res.add(temp.toInt())
-            } else {
-                res.add(res[rowIndex - i])
+
+        repeat(rowIndex + 1) {
+            for (i in res.indices.reversed()) {
+                if (i != 0) {
+                    res[i] += res[i - 1]
+                }
             }
+            res.add(1)
         }
+
         return res
     }
 
