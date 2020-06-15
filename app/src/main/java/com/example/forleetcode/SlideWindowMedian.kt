@@ -37,7 +37,7 @@ package com.example.forleetcode
 /**
  * Nick, 2020/6/12
  * [480] Slide Window Median
- * // TODO: 2020/6/12 fix bug
+ * // TODO: 2020/6/15 implement by PriorityQueue
  */
 class SlideWindowMedian {
     fun medianSlidingWindow(nums: IntArray, k: Int): DoubleArray {
@@ -48,45 +48,37 @@ class SlideWindowMedian {
         result[0] = findMedian(window, medianIndex[0], medianIndex[1])
 
         for (i in 0 until nums.size - k) {
-            window.forEach(::print)
-            println()
-            val removeIndex = window.binarySearch(nums[i])
+
             val nextNum = nums[k + i]
-            var insertIndex = 0
-            while (insertIndex < window.lastIndex && nextNum > window[insertIndex]) {
-                insertIndex++
-            }
+            val removeNum = nums[i]
+            val removeIndex = window.binarySearch(removeNum)
 
-            if (insertIndex == window.lastIndex) {
-                if (nextNum < window[insertIndex]) {
-                    insertIndex--
-                }
-                if (nextNum > window[insertIndex]) {
-                    insertIndex++
-                }
+            window[removeIndex] = nextNum
+            if (removeNum == nextNum) {
+                result[i + 1] = result[i]
+                continue
+            } else if (nextNum < removeNum) {
+                swap(window, removeIndex downTo 1)
+            } else if (nextNum > removeNum) {
+                swap(window, removeIndex + 1 until window.size)
             }
-            println("remove, insert: ($removeIndex, ${nums[i]}), ($insertIndex, $nextNum)")
-            if (removeIndex < insertIndex) {
-                for (j in removeIndex until insertIndex) {
-                    window[j] = window[j + 1]
-                }
-                window[insertIndex] = nextNum
-            } else if (insertIndex < removeIndex) {
-                for (j in removeIndex downTo insertIndex + 1) {
-                    window[j] = window[j - 1]
-                }
-                window[insertIndex] = nextNum
-            } else {
-                window[removeIndex] = nextNum
-            }
-
 
             result[i + 1] = findMedian(window, medianIndex[0], medianIndex[1])
         }
-
-//        window.forEach(::print)
-//        println()
         return result
+    }
+
+    private fun swap(window: IntArray, range: IntProgression) {
+        var temp: Int
+        for (j in range) {
+            if (window[j] < window[j - 1]) {
+                temp = window[j - 1]
+                window[j - 1] = window[j]
+                window[j] = temp
+            } else {
+                break
+            }
+        }
     }
 
     private fun findMedian(window: IntArray, i1: Int, i2: Int): Double {
