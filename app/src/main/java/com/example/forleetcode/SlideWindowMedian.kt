@@ -1,5 +1,10 @@
 package com.example.forleetcode
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import java.util.*
+import kotlin.math.min
+
 //Median is the middle value in an ordered integer list. If the size of the list
 // is even, there is no middle value. So the median is the mean of the two middle
 //value.
@@ -37,9 +42,53 @@ package com.example.forleetcode
 /**
  * Nick, 2020/6/12
  * [480] Slide Window Median
- * // TODO: 2020/6/15 implement by PriorityQueue
  */
 class SlideWindowMedian {
+    // version2 PriorityQueue
+    // 為了改善swap 直線尋訪, 採用binary insert, 最簡單的上就是透過 PriorityQueue, 裡面是用 Balanced Binary Heap 實現的
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun medianSlidingWindow2(nums: IntArray, k: Int): DoubleArray {
+        val result = DoubleArray(nums.size - k + 1)
+        val maxHeap = PriorityQueue<Int>(Comparator { o1, o2 ->
+            when {
+                nums[o1] < nums[o2] -> return@Comparator 1
+                nums[o1] == nums[o2] -> return@Comparator 0
+                else -> return@Comparator -1
+            }
+        })
+
+        val minHeap = PriorityQueue<Int>(Comparator { o1, o2 ->
+            when {
+                nums[o1] > nums[o2] -> return@Comparator 1
+                nums[o1] == nums[o2] -> return@Comparator 0
+                else -> return@Comparator -1
+            }
+        })
+
+        val half = k shr 1
+
+        for (i in nums.indices) {
+            maxHeap.add(i)
+            if (maxHeap.size > half) {
+                minHeap.add(maxHeap.poll())
+            }
+            if (maxHeap.size == half && minHeap.size == k - half) {
+                val medianValue = if (k % 2 == 0) {
+                    (nums[maxHeap.peek()].toDouble() + nums[minHeap.peek()]) / 2
+                } else {
+                    nums[minHeap.peek()].toDouble()
+                }
+                result[i - k + 1] = medianValue
+                if (!minHeap.remove(i - k + 1)) {
+                    maxHeap.remove(i - k + 1)
+                    maxHeap.add(minHeap.poll())
+                }
+            }
+        }
+
+        return result
+    }
+    //    version1
     fun medianSlidingWindow(nums: IntArray, k: Int): DoubleArray {
         val result = DoubleArray(nums.size - k + 1)
         val window = IntArray(k) { i -> nums[i] }
@@ -58,6 +107,7 @@ class SlideWindowMedian {
                 result[i + 1] = result[i]
                 continue
             } else if (nextNum < removeNum) {
+
                 swap(window, removeIndex downTo 1)
             } else if (nextNum > removeNum) {
                 swap(window, removeIndex + 1 until window.size)
