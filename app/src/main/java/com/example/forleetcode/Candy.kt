@@ -51,7 +51,7 @@ class Candy {
             val newMode = ratings[i].compareTo(ratings[i - 1])
             if (mode != newMode) {
                 peek?.also {
-                    if (mode < 0 && accumulate >= it) {
+                    if (accumulate >= it) {
                         result += accumulate - it + 1
                     }
                 }
@@ -74,6 +74,7 @@ class Candy {
                 }
                 mode = newMode
             }
+
             if (mode == 0) {
                 result++
             } else {
