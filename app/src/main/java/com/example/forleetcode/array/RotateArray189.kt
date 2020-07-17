@@ -1,4 +1,4 @@
-package com.example.forleetcode
+package com.example.forleetcode.array
 
 class RotateArray189 {
 //    reverse

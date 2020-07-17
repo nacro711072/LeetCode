@@ -1,4 +1,4 @@
-package com.example.forleetcode.sort
+package com.example.forleetcode.array.sort
 
 class BubbleSort: ArraySort {
     override fun sortArray(nums: IntArray): IntArray {

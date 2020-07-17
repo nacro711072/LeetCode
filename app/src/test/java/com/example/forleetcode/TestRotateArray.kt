@@ -1,5 +1,6 @@
 package com.example.forleetcode
 
+import com.example.forleetcode.array.RotateArray189
 import org.junit.Test
 
 class TestRotateArray {

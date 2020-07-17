@@ -1,4 +1,4 @@
-package com.example.forleetcode.sort
+package com.example.forleetcode.array.sort
 //Given an array of integers nums, sort the array in ascending order.
 //
 //

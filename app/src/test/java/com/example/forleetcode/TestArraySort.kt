@@ -1,9 +1,9 @@
 package com.example.forleetcode
 
-import com.example.forleetcode.sort.HeapSort
-import com.example.forleetcode.sort.InsertSort
-import com.example.forleetcode.sort.MergeSort
-import com.example.forleetcode.sort.QuickSort
+import com.example.forleetcode.array.sort.HeapSort
+import com.example.forleetcode.array.sort.InsertSort
+import com.example.forleetcode.array.sort.MergeSort
+import com.example.forleetcode.array.sort.QuickSort
 import org.junit.Test
 
 class TestArraySort {
