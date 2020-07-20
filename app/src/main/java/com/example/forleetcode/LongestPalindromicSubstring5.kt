@@ -18,59 +18,112 @@ package com.example.forleetcode
 //
 // Related Topics String Dynamic Programming
 class LongestPalindromicSubstring5 {
+    //    以 i 為中心點
+//    S(i, j) = s[i]..s[j]
+//    S(i, j) = S(i + 1, j - 1) && s[i] == s[j]
     fun longestPalindrome(s: String): String {
         if (s.length < 2) return s
-        var currentMaxResult: Pair<Int, Int> = 0 to 0
-        for (i in 0 until s.lastIndex) {
+        var currentMaxResult: Series = Series(0, 0)
+        for (i in 0..s.lastIndex) {
 
-            val resultI = findPalindromic(s, i, currentMaxResult.getLength())
-            if (resultI.getLength() >= currentMaxResult.getLength()) {
-                currentMaxResult = resultI
+            val result1 = findPalindromic(s, i, true)
+            if (result1 > currentMaxResult) {
+                currentMaxResult = result1
+            }
+            val result2 = findPalindromic(s, i, false)
+            if (result2 > currentMaxResult) {
+                currentMaxResult = result2
             }
         }
 
-        return s.substring(currentMaxResult.first, currentMaxResult.second + 1)
+        return s.substring(currentMaxResult.getStart(), currentMaxResult.getEnd() + 1)
     }
 
     private fun findPalindromic(
         s: String,
         mid: Int,
-        maxLength: Int
-    ): Pair<Int, Int>{
+        ignoreCenter: Boolean
+    ): Series {
         var i = 0
-        var maxCount = Math.min(mid, s.lastIndex - mid - 1)
-        if (maxLength > (maxCount + 1) * 2) return 0 to -1
+        val lI = if (ignoreCenter) mid - 1 else mid
+        val bound = Math.min(lI, s.lastIndex - mid)
 
-        while (i <= maxCount) {
-            if (s[mid - i] == s[mid + i + 1]) {
-                i++
+        while (i <= bound && s[lI - i] == s[mid + i]) {
+            i++
+        }
+        i--
+        return Series(lI - i, mid + i)
+    }
+
+    class Series(
+        private var start: Int,
+        private var end: Int
+    ) {
+        private fun getLength(): Int {
+            return end - start + 1
+        }
+
+        fun extendBound() {
+            --start
+            ++end
+        }
+
+        fun getStart(): Int {
+            return start
+        }
+
+        fun getEnd(): Int {
+            return end
+        }
+
+        operator fun compareTo(other: Series): Int {
+            return getLength().compareTo(other.getLength())
+        }
+    }
+    /**
+     *  以長度為優先
+     * */
+    fun longestPalindrome2(s: String): String {
+        if (s.length < 2) return s
+        val candidate: Array<Array<Series?>> = Array(2) { i -> (Array(s.length) { j -> Series(j, j - i) } as Array<Series?>) }
+        var currentMaxSeries: Series = Series(0, 0)
+
+        while (true) {
+            val maxSeries = findExtendSeries(s, candidate, currentMaxSeries)
+            if (maxSeries > currentMaxSeries) {
+                currentMaxSeries = Series(maxSeries.getStart(), maxSeries.getEnd())
             } else {
                 break
             }
         }
-        val count2 = i - 1
-        val result1 = mid - count2 to mid + count2 + 1
 
-        maxCount = Math.min(mid, s.lastIndex - mid)
+        return s.substring(currentMaxSeries.getStart(), currentMaxSeries.getEnd() + 1)
+    }
 
-        var count1 = 0
-        for (i in 1..maxCount) {
-            if (s[mid - i] == s[mid + i]) {
-                count1++
-            } else {
-                break
+    private fun findExtendSeries(
+        s: String,
+        candidate: Array<Array<Series?>>,
+        currentMaxSeries: Series
+    ): Series {
+        var out = currentMaxSeries
+        candidate.forEachIndexed { i, it ->
+            it.forEachIndexed { j, series ->
+                if (series == null) return@forEachIndexed
+                val start = series.getStart()
+                val end = series.getEnd()
+                if (start <= 0 || end >= s.lastIndex) return@forEachIndexed
+
+                if (s[start - 1] == s[end + 1]) {
+                    series.extendBound()
+                    if (series > out) {
+                        out = series
+                    }
+                } else {
+                    candidate[i][j] = null
+                }
             }
         }
-        val result2 = mid - count1 to mid + count1
-
-        return if (result1.getLength() > result2.getLength()) {
-            result1
-        } else {
-            result2
-        }
+        return out
     }
 
-    private inline fun Pair<Int, Int>.getLength(): Int {
-        return second - first + 1
-    }
 }
