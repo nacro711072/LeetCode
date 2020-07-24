@@ -18,9 +18,11 @@ package com.example.forleetcode
 //
 // Related Topics String Dynamic Programming
 class LongestPalindromicSubstring5 {
-    //    以 i 為中心點
-//    S(i, j) = s[i]..s[j]
-//    S(i, j) = S(i + 1, j - 1) && s[i] == s[j]
+    /**
+     * 以 中心點 優先, for each 中心點, 最大的區間
+     * S(i, j) = s[i]..s[j]
+     * S(i, j) = S(i + 1, j - 1) && s[i] == s[j]
+     */
     fun longestPalindrome(s: String): String {
         if (s.length < 2) return s
         var currentMaxResult: Series = Series(0, 0)
@@ -81,7 +83,7 @@ class LongestPalindromicSubstring5 {
         }
     }
     /**
-     *  以長度為優先
+     *  以長度為優先, for each times, 嘗試延展 每個 中心點 的左右區間
      * */
     fun longestPalindrome2(s: String): String {
         if (s.length < 2) return s
