@@ -1,4 +1,4 @@
-package com.example.forleetcode.tree
+package com.example.forleetcode.path
 
 class UniquePath62 {
     fun uniquePaths(m: Int, n: Int): Int {
