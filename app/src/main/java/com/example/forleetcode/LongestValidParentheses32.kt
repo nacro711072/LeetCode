@@ -57,7 +57,7 @@ class LongestValidParentheses32 {
             continue
         }
 
-        val result = rangeList.maxBy {
+        val result = rangeList.maxByOrNull {
             it.getLength()
         }
 
