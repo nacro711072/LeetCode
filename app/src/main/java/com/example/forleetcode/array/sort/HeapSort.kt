@@ -18,21 +18,26 @@ class HeapSort: ArraySort {
 
     private fun Int.getParentIndex(): Int = (this - 1) shr 1
 
-    private fun heapify(nums: IntArray, i: Int, lastIndex: Int) {
-        var parent = i
-        val r = (i + 1) shl 1
-        val l = r - 1
+    private fun heapify(nums: IntArray, root: Int, lastIndex: Int) {
 
-        if (l <= lastIndex && nums[parent] < nums[l]) {
-            parent = l
-        }
-        if (r <= lastIndex && nums[parent] < nums[r]) {
-            parent = r
-        }
-        if (i == parent) return
+        val nextRoot = findLargestIndexOfTree(nums, root, lastIndex)
+        if (root == nextRoot) return
 
-        swap(nums, i, parent)
-        heapify(nums, parent, lastIndex)
+        swap(nums, root, nextRoot)
+        heapify(nums, nextRoot, lastIndex)
     }
 
+    private fun findLargestIndexOfTree(nums: IntArray, root: Int, lastIndex: Int): Int {
+        var largestIndex = root
+        val r = (root + 1) shl 1
+        val l = r - 1
+
+        if (l <= lastIndex && nums[l] > nums[largestIndex]) {
+            largestIndex = l
+        }
+        if (r <= lastIndex && nums[r] > nums[largestIndex]) {
+            largestIndex = r
+        }
+        return largestIndex
+    }
 }
