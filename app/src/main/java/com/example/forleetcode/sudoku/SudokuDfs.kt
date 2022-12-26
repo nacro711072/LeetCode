@@ -6,35 +6,18 @@ class SudokuDfs: ISudoku37 {
     private val cacheCol: Array<BooleanArray> = Array(9) { BooleanArray(9) { false } }
 
     override fun solveSudoku(board: Array<CharArray>): Unit {
+        for (pos in 0 until 81) {
+            val i = pos / 9
+            val j = pos % 9
+            val char = board[i][j]
+            if (char == '.') continue
 
-        for (i in 0 until 9) {
-//            build square
-            val row = i / 3 * 3
-            val col = i % 3 * 3
-            for (ii in row..row + 2) {
-                for (jj in col..col + 2) {
-                    val char = board[ii][jj]
-                    if (char != '.')
-                        cacheSquare[i][char.digitToInt() - 1] = true
-                }
-            }
+            val squareI = i / 3 * 3 + j / 3
+            val charIndex = char.digitToInt() - 1
 
-//            build col
-            (0 until 9)
-                .map { ii -> board[ii][i] }
-                .filter { it != '.' }
-                .forEach { char ->
-                    cacheCol[i][char.digitToInt() - 1] = true
-                }
-
-//            build row
-            (0 until 9)
-                .map { ii -> board[i][ii] }
-                .filter { it != '.' }
-                .forEach { char ->
-                    cacheRow[i][char.digitToInt() - 1] = true
-                }
-
+            cacheSquare[squareI][charIndex] = true
+            cacheRow[i][charIndex] = true
+            cacheCol[j][charIndex] = true
         }
 
         dfs(board, 0)
