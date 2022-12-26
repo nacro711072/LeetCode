@@ -14,6 +14,12 @@ fun String.parse2DArray_IntArray(): Array<IntArray> {
         .toList().toTypedArray()
 }
 
+fun String.parse2DArray_CharArray(): Array<CharArray> {
+    return parse2D()
+        .map { it.replace("\"", "").replace(",", "").toCharArray() }
+        .toList().toTypedArray()
+}
+
 fun String.parse2DList_List(): List<List<Int>> {
     return parse2D()
         .map { it.split(",").map(String::toInt).toList() }
